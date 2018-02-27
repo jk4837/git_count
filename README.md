@@ -9,6 +9,6 @@ Go to your workspace (*directory structure : "workspace/project_1/.git"*)
 ## Demo
 ![](demo/result.jpg)
 
-Execution (uncomment line 13 to hide project name)
+Execution (edit varieble $hide at line 4 to hide project's name)
 
-![](demo/run.jpg)
+![](demo/run.gif)
