@@ -1,33 +1,33 @@
-#! /bin/zsh
+#! /bin/bash
 
 # for hiding information, change $hide to 1
 hide=0
-global_user_name=`git config --global --get user.name`;
+global_user_name=`git config --global --get user.name`; 
 total_project_dir=`ls | wc -w`
 total_project_dir_cnt=0;
 total_add=0; 
 total_sub=0;
 total=0;
 
-print "===========   Counting your contributions   ==========="
+printf "===========   Counting your contributions   ===========\n"
 if [[ $hide -eq 0 ]]; then
-	print "workspace : \"$PWD\"";
+        printf "workspace : \"$PWD\"\n";
 else
-	print "workspace : \"${PWD//[a-zA-Z0-9]/*}\"";
+        printf "workspace : \"${PWD//[a-zA-Z0-9]/*}\"\n";
 fi
-print "\nproject\033[100D\033[16C| + add\033[100D\033[32C- sub\033[100D\033[48C= total";
-print "\033[2K-------------------------------------------------------";
+printf "\nproject\033[100D\033[16C| + add\033[100D\033[32C- sub\033[100D\033[48C= total\n";
+printf "\033[2K-------------------------------------------------------\n";
 for project_dir in `ls -w 1`; do
 	if [[ $hide -eq 0 ]]; then
 		project_name=$project_dir;
 	else
 		project_name=${project_dir//[a-zA-Z0-9]/*};
 	fi
-	print "\033[2K"$total_project_dir_cnt" / "$total_project_dir"\t"$project_name;
+	printf "\033[2K"$total_project_dir_cnt" / "$total_project_dir"\t"$project_name"\n";
 	printf "\033[1A";
 	# skip project
-	if [[ $project_dir =~ "linux*" ]]; then 
-		print "\033[2Kskip "$project_name"\033[1A"; 
+	if [[ $project_dir =~ "linux" ]]; then 
+		printf "\033[2Kskip "$project_name"\033[1A\n"; 
 		continue; 
 	fi;
 	local_user_name=`git --git-dir=$project_dir/.git config --local --get user.name 2>&1`;
@@ -35,7 +35,7 @@ for project_dir in `ls -w 1`; do
 		local_user_name=$global_user_name;
 	fi
 	git_log=`git --git-dir=$project_dir/.git log --author="$local_user_name" --pretty=tformat: --numstat 2>&1`;
-	if [[ $git_log =~ "fatal\: Not a git repository*" ]]; then
+	if [[ $git_log =~ "fatal: Not a git repository" ]]; then
 		continue; 
 	fi;
 	now_cal=(`echo "$git_log" | awk '{ 
@@ -44,16 +44,16 @@ for project_dir in `ls -w 1`; do
 	} END { 
 		print now_add"\n"now_sub;
 	}'`)
-	now_add=${now_cal[1]};
-	now_sub=${now_cal[2]};
+	now_add=${now_cal[0]};
+	now_sub=${now_cal[1]};
 	if [[ $now_add>0 ]] || [[ $now_sub>0 ]]; then
 		now_total=$(( now_add - now_sub ));
 		total=$(( total + now_total ));
 		total_add=$(( total_add + now_add ));
 		total_sub=$(( total_sub + now_sub ));
-		print "\033[2K"$project_name"\033[100D\033[16C| + "$now_add"\033[100D\033[32C- "$now_sub"\033[100D\033[48C= "$now_total;
+		printf "\033[2K"$project_name"\033[100D\033[16C| + "$now_add"\033[100D\033[32C- "$now_sub"\033[100D\033[48C= "$now_total"\n";
 	fi;
 	total_project_dir_cnt=$(( total_project_dir_cnt + 1));
 done;
-print "\033[2K-------------------------------------------------------";
-print "TOTAL\033[100D\033[16C| + "$total_add"\033[100D\033[32C- "$total_sub"\033[100D\033[48C= "$total;
+printf "\033[2K-------------------------------------------------------\n";
+printf "TOTAL\033[100D\033[16C| + "$total_add"\033[100D\033[32C- "$total_sub"\033[100D\033[48C= "$total"\n";

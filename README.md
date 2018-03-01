@@ -2,9 +2,10 @@
 Count all of your contribution line in all projects under workspace.
 
 ## Usage
+Download a suitable "git_count" file (*mostly for_bash version*)
 Go to your workspace (*directory structure : "workspace/project_1/.git"*)
 
-`./git_count`
+excute `git_count`
 
 ## Demo
 ![](demo/result.jpg)
