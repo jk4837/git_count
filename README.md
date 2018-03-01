@@ -11,6 +11,6 @@ Excute `git_count`
 ## Demo
 ![](demo/result.jpg)
 
-Execution (edit varieble $hide at line 4 to hide project's name)
+Execution (edit variable $hide at line 4 to hide information)
 
 ![](demo/run.gif)
